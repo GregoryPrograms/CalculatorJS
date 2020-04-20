@@ -1,0 +1,9 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 60px 60px 60px;
+}
+#window {
+    height: 38px;
+    width: 180px;
+    border: 1px solid black;
+}
