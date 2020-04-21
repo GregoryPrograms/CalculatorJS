@@ -11,9 +11,12 @@
 </head>
 
 <body>
-  <script src="js/calculator.js"></script>
-  <div id = "window">
+  <div id = "display">
+    <div id = "numWindow">
+    </div>
+    <div id = "operWindow">
 
+    </div>
   </div>
   <div class="grid-container" id ="numGrid">
     <button type="button" class="numButton" id = "0">0</button>
@@ -31,10 +34,12 @@
   </div>   
   <div class = grid-container" id = "operGrid">
     <button type="button" class = "operButton" id = "*">*</button>
-    <button type="button" class = "operButton" id = "*">/</button>
-    <button type="button" class = "operButton" id = "*">+</button>
-    <button type="button" class = "operButton" id = "*">-</button>
+    <button type="button" class = "operButton" id = "/">/</button>
+    <button type="button" class = "operButton" id = "+">+</button>
+    <button type="button" class = "operButton" id = "-">-</button>
+    <button type="button" class = "clearButton" id = "clear"> clear</button></button>
   </div>
+  <script src="js/calculator.js"></script>
 </body>
 
 </html>
