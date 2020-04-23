@@ -1,6 +1,4 @@
 1. Increase Scope of project -
-        Ensure floating point functionality
-        Improve calculator visually, including enlarging the calculator
-        Rewrite the calculator window to display all operations until '=' or 'clear' is pressed -
-            e.g., '570 + 271 - 46 * 57'
+        Improve calculator visually
+        Make it obey pemdas (rewrite the code to go through curWindow piece-by-piece and remove 
         Add parentheses functionality.

@@ -4,12 +4,14 @@
 //  prevValue (String): The value previously inputted, if any. Usually only exists after an operator is chosen.
 //  prevAns (String): The most recent answer the calculator has recieved. Only exists after the user selects '='.
 //  isError (String): An error tracker. Watches for calculations that would crash the calculator or lead to NaN answers, and provides output.
+//  currentWindow (String): Tracks what should be displayed on the screen.
 var calcSt = {
     curValue: "",
     curOper: "",
     prevValue:"",
     prevAns:  "",
-    isError: "false" 
+    isError: "false",
+    curWindow: ""
 };
 
 //add, subtract, multiply, and divide: simple operative functions that return the correct calculation between the two parameters. Could be handled within operate simply, but the code specs required they be individual functions.
@@ -64,7 +66,6 @@ operate = function(num1, oper, num2, calcState){
 //  calcState (object): The current state of the calculator, carrying information needed for calculation and error handling.
 windowOutput = function(button, calcState){
     varNumWindow = document.getElementById("numWindow");
-    varOpWindow = document.getElementById("operWindow");
     switch(button.className){
         case 'numButton':
             //If the button was a number, adds it on to the end of the current value being input.
@@ -74,6 +75,7 @@ windowOutput = function(button, calcState){
             //If we don't have a current value and we hit operator, we try to use the previous answer
             if(calcState.curValue == ""){
                 if(calcState.prevAns != ""){
+                    calcState.curWindow += "Ans"
                     calcState.prevValue = calcState.prevAns;
                     calcState.curOper = button.id;
                     break;
@@ -85,7 +87,7 @@ windowOutput = function(button, calcState){
                 }
             }
             else{
-                //If we already have two values and an operator, computes them. This minimizes number of variables needed for storage.
+                //If we already have two values and an operator, computes them. This minimizes number of variables needed for storage, but causes errors with PEMDAS. Kept in current version of the code to focus on other issues before hitting on this.
                 calcState.prevValue = calcState.prevValue == ""? calcState.curValue : 
                                                                 operate(parseFloat(calcState.prevValue), calcState.curOper, parseFloat(calcState.curValue), calcState);
                 calcState.curValue = "";
@@ -107,6 +109,7 @@ windowOutput = function(button, calcState){
             calcState.prevValue = "";
             calcState.curOper = "";
             calcState.prevAns = "";
+            calcState.curWindow = "";
             break;
         case 'ansButton':
             //Hitting the answer button sets the current value to the previous answer recieved by the calculator. If the current value already has something, we need to offload it to our previous value. If previous value aready exists, combines previous value and current value into previous value by operating.
@@ -124,6 +127,12 @@ windowOutput = function(button, calcState){
                 calcState.curValue = calcState.prevAns;
             }
             break;
+        case 'dotButton':
+            //If we don't already have a period in our current value, we add it. Else, we error (5.5.1 is not a real number).
+            calcState.curValue.includes(".") ?
+                calcState.isError = "Multiple periods detected" :
+                calcState.curValue += button.id;
+            break;
         default: break;
     }
 
@@ -136,13 +145,18 @@ windowOutput = function(button, calcState){
         calcState.prevValue = "";
         calcState.curOper = "";
         calcState.prevAns = "";
+        calcState.curWindow = "";
     }
     else{
         //If there is no currentValue or currentOperator, and we have a previousAnswer, then we know the user has just input the '=' sign. Therefore, we output the previous answer.
-        (calcState.curValue == "" && calcState.curOper == "" && calcState.prevAns != "")?
-            varNumWindow.innerHTML = calcState.prevAns:
-            varNumWindow.innerHTML = calcState.curValue;
-        varOpWindow.innerHTML = calcState.curOper;
+        if(calcState.curValue == "" && calcState.curOper == "" && calcState.prevAns != ""){
+            varNumWindow.innerHTML = calcState.prevAns;
+            calcState.curWindow = ""
+        }
+        else{
+            calcState.curWindow += button.id;
+            varNumWindow.innerHTML = calcState.curWindow;    
+        }
     }
 }
 
